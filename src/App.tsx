@@ -8,6 +8,7 @@ import Plans from './pages/Plans';
 import Runs from './pages/Runs';
 import Reports from './pages/Reports';
 import Manifests from './pages/Manifests';
+import Calibration from './pages/Calibration';
 
 export function useOperator(): [string, (v: string) => void] {
   const op = useLiveQuery(async () => (await getKv<string>('operator')) ?? '管理员A', []);
@@ -31,6 +32,7 @@ export default function App() {
         <NavLink to="/runs">生成运行</NavLink>
         <NavLink to="/reports">质量核验</NavLink>
         <NavLink to="/manifests">发布清单</NavLink>
+        <NavLink to="/calibration">学习效果校准</NavLink>
         <div className="op-box">
           当前操作员（本地演示）
           <select value={operator} onChange={(e) => setOperator(e.target.value)}>
@@ -48,6 +50,7 @@ export default function App() {
           <Route path="/runs" element={<Runs />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/manifests" element={<Manifests />} />
+          <Route path="/calibration" element={<Calibration />} />
         </Routes>
       </main>
     </div>

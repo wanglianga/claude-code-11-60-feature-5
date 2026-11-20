@@ -10,7 +10,8 @@ export default function Dashboard() {
     plans: await db.plans.count(),
     runs: await db.runs.count(),
     reports: await db.reports.count(),
-    manifests: await db.manifests.count()
+    manifests: await db.manifests.count(),
+    calibrations: await db.calibrationReports.count()
   }), []);
   const lastRun = useLiveQuery(async () => {
     const runs = await db.runs.orderBy('seq').reverse().toArray();
@@ -33,7 +34,8 @@ export default function Dashboard() {
           { label: '生成方案', value: counts?.plans, to: '/plans' },
           { label: '生成运行', value: counts?.runs, to: '/runs' },
           { label: '核验报告', value: counts?.reports, to: '/reports' },
-          { label: '发布清单', value: counts?.manifests, to: '/manifests' }
+          { label: '发布清单', value: counts?.manifests, to: '/manifests' },
+          { label: '学习效果校准', value: counts?.calibrations, to: '/calibration' }
         ].map((s) => (
           <div className="card" key={s.label}>
             <div className="stat-num">{s.value ?? '…'}</div>
@@ -52,6 +54,7 @@ export default function Dashboard() {
             <li><b>启动生成运行</b>：在「生成运行」以固定快照输出全新标识的多表演练包。</li>
             <li><b>质量核验</b>：对运行结果执行总体统计比对、引用完整性、资源占用、时间可行性与基础风险核验。</li>
             <li><b>发布清单</b>：核验通过后生成清单，可回查批次、规则、运行参数与核验结果。</li>
+            <li><b>学习效果校准</b>：把演练包场景特征与匿名学员练习顺序、决策步骤、用时、标准处置依据及迁移测验关联，估计场景难度/区分度与训练安排对未见场景正确率的效应；不生成个人排名。</li>
           </ol>
         </div>
         <div className="card">

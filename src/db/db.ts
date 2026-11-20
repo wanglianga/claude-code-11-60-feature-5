@@ -2,6 +2,7 @@
 
 import Dexie, { type Table } from 'dexie';
 import type { BatchMeta, RuleSet, Plan, Run, Report, Manifest, TableRows } from '../domain/types';
+import type { CalibrationDataset, CalibrationReport } from '../domain/calibration/types';
 
 export interface BatchRowsRow { key: string; tables: TableRows; }
 export interface RunOutputRow { runId: string; tables: TableRows; }
@@ -17,6 +18,8 @@ export class SynthDB extends Dexie {
   reports!: Table<Report, string>;
   manifests!: Table<Manifest, string>;
   kv!: Table<KvRow, string>;
+  calibrationDatasets!: Table<CalibrationDataset, string>;
+  calibrationReports!: Table<CalibrationReport, string>;
 
   constructor() {
     super('emerg-synth-lab');
@@ -30,6 +33,11 @@ export class SynthDB extends Dexie {
       reports: 'id, runId',
       manifests: 'id, runId',
       kv: 'key'
+    });
+    // v2：新增演练场景学习效果校准（数据集 + 报告），与既有表并存
+    this.version(2).stores({
+      calibrationDatasets: 'id, preset, seed',
+      calibrationReports: 'id, datasetId, methodRecommended'
     });
   }
 }
